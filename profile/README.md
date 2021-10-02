@@ -1,12 +1,12 @@
-## Hi there 👋
+### Hey! I'm [@rikhilrai](https://www.rikhilrai.com) (Rikhil Raithatha) 👋
 
-<!--
+I'm a software developer from the UK. 🇬🇧
 
-**Here are some ideas to get you started:**
+I like building things with databases, Docker, Python, TypeScript (and JavaScript), and modern frontend frameworks. I spend my spare time playing music, sports and building apps.
 
-🙋‍♀️ A short introduction - what is your organization all about?
-🌈 Contribution guidelines - how can the community get involved?
-👩‍💻 Useful resources - where can the community find your docs? Is there anything else the community should know?
-🍿 Fun facts - what does your team eat for breakfast?
-🧙 Remember, you can do mighty things with the power of [Markdown](https://guides.github.com/features/mastering-markdown/)
--->
+You can find me on:
+
+* [Website: rikhilrai.com](https://www.rikhilrai.com/)
+* [Twitter: @rikhilrai](https://twitter.com/rikhilrai/)
+* [GitHub: @rikhilrai](https://github.com/rikhilrai/)
+* [LinkedIn: @rikhilrai](https://linkedin.com/in/rikhilrai/)
