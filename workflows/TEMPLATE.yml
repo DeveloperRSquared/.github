@@ -1,25 +1,21 @@
-name: Reusable Build
-
 on:
-  pull_request:
-    paths-ignore:
-      - 'docs/**'
-    branches:
-      - main
-
-defaults:
-  run:
-    shell: bash
-
-concurrency:
-  group: ${{ github.head_ref }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      username:
+        description: 'Username'
+        default: 'developerRSquared'
+        required: false
+        type: string
 
 jobs:
-  do-it:
+  run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Run a one-line script
+        run: echo Hello, world! ${{ inputs.username }}
 
+  publish:
+    runs-on: ubuntu-latest
+    steps:
       - name: Run a one-line script
         run: echo Hello, world!
