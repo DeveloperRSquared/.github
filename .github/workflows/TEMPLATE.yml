@@ -2,12 +2,12 @@ name: Template
 
 on:
   workflow_call:
-    # inputs:
-    #   username:
-    #     description: 'Username'
-    #     default: 'developerRSquared'
-    #     required: false
-    #     type: string
+    inputs:
+      username:
+        description: 'Username'
+        default: 'developerRSquared'
+        required: false
+        type: string
 
 jobs:
   run:
