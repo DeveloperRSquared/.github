@@ -3,15 +3,19 @@ name: Template
 on:
   workflow_call:
     inputs:
-      username:
-        description: 'Username'
-        default: 'developerRSquared'
-        required: false
+      test_pypi_url:
+        description: 'URL for TestPyPI'
+        default: 'https://test.pypi.org/'
+        required: true
         type: string
+    secrets:
+      access-token:
+        description: 'A token passed from the caller workflow'
+        required: true
 
 jobs:
   build:
-    name: Build (${{ matrix.python-version }}) ${{ matrix.suffix }}
+    name: Build (${{ matrix.python-version }})
 
     runs-on: ${{ matrix.image }}
     strategy:
@@ -99,7 +103,7 @@ jobs:
 
     environment:
       name: TestPyPI
-      url: https://test.pypi.org/project/http-exceptions/
+      url: ${{ inputs.test_pypi_url }}
 
     steps:
       - uses: actions/checkout@v2
