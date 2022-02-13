@@ -9,8 +9,8 @@ on:
         required: true
         type: string
     secrets:
-      access-token:
-        description: 'A token passed from the caller workflow'
+      testpypi_token:
+        description: 'Token for TestPyPI'
         required: true
 
 jobs:
@@ -157,5 +157,5 @@ jobs:
         env:
           POETRY_REPOSITORIES_TESTPYPI_URL: https://test.pypi.org/legacy/
           POETRY_HTTP_BASIC_TESTPYPI_USERNAME: __token__
-          POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.TESTPYPI_TOKEN }}
+          POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.testpypi_token }}
         run: poetry publish --dry-run --repository testpypi
