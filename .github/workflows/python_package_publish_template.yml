@@ -11,17 +11,17 @@ on:
       should_upload_coverage_to_codecov:
         description: 'Should upload coverage to Codecov?'
         default: false
-        required: true
+        required: false
         type: boolean
       should_dry_run_publish_to_test_pypi:
         description: 'Should dry run publish to TestPyPI?'
         default: false
-        required: true
+        required: false
         type: boolean
       should_publish_to_test_pypi:
         description: 'Should publish to TestPyPI?'
         default: false
-        required: true
+        required: false
         type: boolean
     secrets:
       pypi_token:
