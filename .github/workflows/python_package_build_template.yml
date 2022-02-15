@@ -1,4 +1,4 @@
-name: Template
+name: Python Package Build Template
 
 on:
   workflow_call:
