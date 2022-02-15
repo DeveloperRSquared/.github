@@ -3,25 +3,43 @@ name: Python Package Publish Template
 on:
   workflow_call:
     inputs:
-      test_pypi_url:
-        description: 'URL for TestPyPI'
-        default: 'https://test.pypi.org/'
+      pypi_url:
+        description: 'URL for PyPI'
+        default: 'https://pypi.org/'
         required: true
         type: string
-    secrets:
-      testpypi_token:
-        description: 'Token for TestPyPI'
+      should_upload_coverage_to_codecov:
+        description: 'Should upload coverage to Codecov?'
+        default: false
         required: true
+        type: boolean
+      should_dry_run_publish_to_test_pypi:
+        description: 'Should dry run publish to TestPyPI?'
+        default: false
+        required: true
+        type: boolean
+      should_publish_to_test_pypi:
+        description: 'Should publish to TestPyPI?'
+        default: false
+        required: true
+        type: boolean
+    secrets:
+      pypi_token:
+        description: 'Token for PyPI'
+        required: true
+      codecov_token:
+        description: 'Token for Codecov'
+        required: false
 
 jobs:
-  publish_test_pypi:
-    name: Publish TestPyPI
+  publish:
+    name: Publish
 
     runs-on: ubuntu-latest
 
     environment:
       name: TestPyPI
-      url: ${{ inputs.test_pypi_url }}
+      url: ${{ inputs.pypi_url }}
 
     steps:
       - uses: actions/checkout@v2
@@ -64,16 +82,26 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
+        if: ${{ inputs.should_upload_coverage_to_codecov }}
         with:
           fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.codecov_token }}
 
       - name: Build project for distribution
         run: poetry build
 
       - name: Publish to Test PyPI (dry run)
+        if: ${{ inputs.should_dry_run_publish_to_test_pypi }}
         env:
           POETRY_REPOSITORIES_TESTPYPI_URL: https://test.pypi.org/legacy/
           POETRY_HTTP_BASIC_TESTPYPI_USERNAME: __token__
-          POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.testpypi_token }}
+          POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.pypi_token }}
         run: poetry publish --dry-run --repository testpypi
+
+      - name: Publish to Test PyPI
+        if: ${{ inputs.should_publish_to_test_pypi }}
+        env:
+          POETRY_REPOSITORIES_TESTPYPI_URL: https://test.pypi.org/legacy/
+          POETRY_HTTP_BASIC_TESTPYPI_USERNAME: __token__
+          POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.pypi_token }}
+        run: poetry publish --repository testpypi
