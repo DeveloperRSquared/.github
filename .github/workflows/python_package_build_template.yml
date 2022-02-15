@@ -8,6 +8,10 @@ on:
         required: true
         type: string
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     name: Build (${{ matrix.python-version }})

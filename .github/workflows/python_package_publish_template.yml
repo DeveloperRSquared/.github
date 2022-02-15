@@ -3,6 +3,10 @@ name: Python Package Publish Template
 on:
   workflow_call:
     inputs:
+      environment:
+        description: 'Environment'
+        required: true
+        type: string
       pypi_url:
         description: 'URL for PyPI'
         default: 'https://pypi.org/'
@@ -10,6 +14,11 @@ on:
         type: string
       should_upload_coverage_to_codecov:
         description: 'Should upload coverage to Codecov?'
+        default: false
+        required: false
+        type: boolean
+      should_check_package_version:
+        description: 'Should check package version'
         default: false
         required: false
         type: boolean
@@ -23,6 +32,17 @@ on:
         default: false
         required: false
         type: boolean
+      should_publish_to_pypi:
+        description: 'Should publish to PyPI?'
+        default: false
+        required: false
+        type: boolean
+      should_create_release:
+        description: 'Should create release?'
+        default: false
+        required: false
+        type: boolean
+
     secrets:
       pypi_token:
         description: 'Token for PyPI'
@@ -31,6 +51,10 @@ on:
         description: 'Token for Codecov'
         required: false
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   publish:
     name: Publish
@@ -38,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: TestPyPI
+      name: ${{ inputs.environment }}
       url: ${{ inputs.pypi_url }}
 
     steps:
@@ -77,7 +101,19 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Check package version == tag
+        if: ${{ inputs.should_check_package_version }}
+        run: |
+          source $(poetry env info --path)/bin/activate
+          VERSION=$(poetry version --short)
+          echo "Expected tag: refs/tags/v${VERSION}. Tag: ${{ github.ref }}."
+          if [ "${{ github.ref }}" != "refs/tags/v${VERSION}" ]; then
+            echo "Tag and expected tags do not match. Exiting ..."
+            exit 1;
+          fi
+
       - name: Run tests (pytest)
+        if: ${{ inputs.should_upload_coverage_to_codecov }}
         run: poetry run python -m pytest -c $(pwd)/pyproject.toml
 
       - name: Upload coverage to Codecov
@@ -105,3 +141,21 @@ jobs:
           POETRY_HTTP_BASIC_TESTPYPI_USERNAME: __token__
           POETRY_HTTP_BASIC_TESTPYPI_PASSWORD: ${{ secrets.pypi_token }}
         run: poetry publish --repository testpypi
+
+      - name: Publish to PyPI
+        if: ${{ inputs.should_publish_to_pypi }}
+        env:
+          POETRY_HTTP_BASIC_PYPI_USERNAME: __token__
+          POETRY_HTTP_BASIC_PYPI_PASSWORD: ${{ secrets.pypi_token }}
+        run: poetry publish
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        if: ${{ inputs.should_create_release }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
