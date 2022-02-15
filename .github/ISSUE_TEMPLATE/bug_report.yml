@@ -1,5 +1,5 @@
 name: 🐛 Bug Report
-description: Report a bug.
+description: Report a bug
 title: '[BUG]: '
 labels: ['bug']
 body:
@@ -25,7 +25,7 @@ body:
       required: true
 
   - type: textarea
-    id: extra
+    id: additional-information
     attributes:
       label: Additional information
       description: |
