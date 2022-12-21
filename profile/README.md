@@ -6,7 +6,7 @@ I like building things with databases, Docker, Python, TypeScript (and JavaScrip
 
 You can find me on:
 
-* [Website: rikhilrai.com](https://www.rikhilrai.com/)
-* [Twitter: @rikhilrai](https://twitter.com/rikhilrai/)
-* [GitHub: @rikhilrai](https://github.com/rikhilrai/)
-* [LinkedIn: @rikhilrai](https://linkedin.com/in/rikhilrai/)
+- [Website: rikhilrai.com](https://www.rikhilrai.com/)
+- [Twitter: @rikhilrai](https://twitter.com/rikhilrai/)
+- [GitHub: @rikhilrai](https://github.com/rikhilrai/)
+- [LinkedIn: @rikhilrai](https://linkedin.com/in/rikhilrai/)
