@@ -64,16 +64,16 @@ jobs:
         run: poetry install --no-dev
 
       - name: Check imports
-        run: poetry run python -c 'from src.${{ inputs.package_name }} import __version__; print(__version__)'
+        run: poetry run python -c 'from ${{ inputs.package_name }} import __version__; print(__version__)'
 
       - name: Install dev dependencies
         run: poetry install
 
       - name: Check import order (isort)
-        run: poetry run python -m isort --check-only --settings-path $(pwd)/pyproject.toml src/
+        run: poetry run python -m isort --check-only --settings-path $(pwd)/pyproject.toml ./
 
       - name: Check unused imports (autoflake)
-        run: poetry run python -m autoflake --check --remove-unused-variable --remove-all-unused-imports --expand-star-imports --ignore-init-module-imports --recursive src/
+        run: poetry run python -m autoflake --check --remove-unused-variable --remove-all-unused-imports --expand-star-imports --ignore-init-module-imports --recursive ./
 
       - name: Check code style (black)
         run: poetry run python -m black --config $(pwd)/pyproject.toml .
@@ -82,14 +82,14 @@ jobs:
         run: poetry run python -m flake8 --config $(pwd)/.flake8
 
       - name: Check lint (pylint)
-        run: poetry run python -m pylint --rcfile $(pwd)/pyproject.toml src/
+        run: poetry run python -m pylint --rcfile $(pwd)/pyproject.toml ./**/*.py
 
       - name: Check typing (mypy)
-        run: poetry run python -m mypy --config-file $(pwd)/pyproject.toml src/
+        run: poetry run python -m mypy --config-file $(pwd)/pyproject.toml .
 
       - name: Install pytest plugin
         if: ${{ matrix.python-version == '3.10' }}
         run: poetry run pip install pytest-github-actions-annotate-failures
 
       - name: Run tests (pytest)
-        run: poetry run python -m pytest src/
+        run: poetry run python -m pytest .
