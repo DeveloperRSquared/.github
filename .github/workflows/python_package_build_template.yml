@@ -40,11 +40,11 @@ jobs:
         id: full-python-version
         run: echo "VERSION=$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")" >> $GITHUB_OUTPUT
 
-      - name: Install poetry 1.1.12
+      - name: Install poetry
         uses: snok/install-poetry@v1
-        with:
-          version: 1.1.12
-          # virtualenvs-in-project: true
+        # with:
+        #   version: 1.1.12
+        #   virtualenvs-in-project: true
 
       - name: Configure poetry
         run: poetry config virtualenvs.in-project true
