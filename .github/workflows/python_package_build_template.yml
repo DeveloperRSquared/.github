@@ -61,7 +61,7 @@ jobs:
         run: timeout 10s poetry run pip --version || rm -rf .venv
 
       - name: Install dependencies
-        run: poetry install --no-dev
+        run: poetry install --without dev
 
       - name: Check imports
         run: poetry run python -c 'from ${{ inputs.package_name }} import __version__; print(__version__)'
